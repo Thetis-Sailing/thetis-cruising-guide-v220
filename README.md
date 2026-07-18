@@ -31,3 +31,7 @@ Fiche THETIS reconstruite fidèlement selon la maquette validée : présentation
 ## Correctif v2.2.1
 
 - Sur téléphone, l’ouverture du panneau des filtres ne place plus automatiquement le curseur dans le champ Recherche. Le clavier ne s’ouvre que lorsque l’utilisateur touche volontairement ce champ.
+
+
+## Modification v2.2.4
+Le panneau Recherche & filtres sur mobile est remonté d’environ 1 cm supplémentaire à partir de la v2.2.3. Aucune autre fonctionnalité n’est modifiée.
