@@ -162,3 +162,28 @@ body.night .thetis-comment{
 body.night .thetis-comment.is-draft{
   color:#d7aaa6;
 }
+/* THETIS v2.4.3 — Encadré IMPORTANT */
+
+.profile-disclaimer.important{
+  background:#fff4e5;
+  border:2px solid #f4a300;
+  color:#7a4200;
+}
+
+.profile-disclaimer.important span{
+  font-size:24px;
+}
+
+.profile-disclaimer.important strong{
+  color:#7a4200;
+}
+
+body.night .profile-disclaimer.important{
+  background:#4a2a08;
+  border-color:#ffbd59;
+  color:#ffe6bf;
+}
+
+body.night .profile-disclaimer.important strong{
+  color:#ffe6bf;
+}
