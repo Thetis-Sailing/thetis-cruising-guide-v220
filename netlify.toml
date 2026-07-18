@@ -1,0 +1,17 @@
+[build]
+  publish = "."
+
+[[headers]]
+  for = "/sw.js"
+  [headers.values]
+    Cache-Control = "no-cache"
+
+[[headers]]
+  for = "/version.json"
+  [headers.values]
+    Cache-Control = "no-cache"
+
+[[headers]]
+  for = "/database/THETIS_Database_MASTER.xlsx"
+  [headers.values]
+    Cache-Control = "no-cache"

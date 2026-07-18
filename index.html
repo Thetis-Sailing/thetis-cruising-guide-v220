@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#071b2a">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <title>THETIS — Cruising Guide</title>
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="icons/icon-192.png">
+  <link rel="apple-touch-icon" href="icons/icon-192.png">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <strong>THETIS</strong>
+      <span>Côte turque & Dodécanèse · <b id="appVersion">v2.0.0</b></span>
+    </div>
+    <div class="top-actions">
+      <button id="locateBtn" class="icon-btn" title="Ma position" aria-label="Ma position">◎</button>
+      <button id="themeBtn" class="icon-btn" title="Mode nuit" aria-label="Mode nuit">☾</button>
+      <button id="installBtn" class="install-btn" hidden>Installer</button>
+    </div>
+  </header>
+
+  <main>
+    <section id="map" aria-label="Carte des mouillages"></section>
+
+    <button id="filtersToggle" class="floating-btn" aria-controls="filtersPanel" aria-expanded="false">☰ Filtres <span id="floatingCount">183</span></button>
+    <div id="panelBackdrop" class="panel-backdrop"></div>
+
+    <aside id="filtersPanel" class="filters-panel" aria-label="Filtres">
+      <div class="panel-head">
+        <div>
+          <strong>Recherche & filtres</strong>
+          <small id="resultCount">183 fiches</small>
+        </div>
+        <button id="filtersClose" class="close-btn" aria-label="Fermer">×</button>
+      </div>
+
+      <div class="filters-controls">
+        <label class="search-label">
+          Recherche
+          <input id="searchInput" type="search" placeholder="Nom, zone, île, VHF…" autocomplete="off">
+        </label>
+
+        <div class="two-cols">
+          <label>Zone<select id="zoneFilter"><option value="">Toutes</option></select></label>
+          <label>Type<select id="typeFilter"><option value="">Tous</option></select></label>
+        </div>
+
+        <div class="checks">
+          <label><input id="supermarketFilter" type="checkbox"> Supermarché</label>
+          <label><input id="restaurantFilter" type="checkbox"> Restaurant / snack</label>
+          <label><input id="vhfFilter" type="checkbox"> VHF renseigné</label>
+          <label><input id="favoritesFilter" type="checkbox"> Favoris</label>
+        </div>
+
+        <button id="resetFilters" class="secondary-btn">Réinitialiser</button>
+      </div>
+      <div id="resultsList" class="results-list"></div>
+    </aside>
+
+    <section id="detailSheet" class="detail-sheet" aria-live="polite">
+      <div class="sheet-handle"></div>
+      <button id="detailClose" class="close-btn detail-close" aria-label="Fermer">×</button>
+      <div id="detailContent"></div>
+    </section>
+
+    <div id="offlineBadge" class="offline-badge">Mode hors connexion — carte limitée aux tuiles déjà chargées</div>
+    <div id="updateBadge" class="update-badge">Nouvelle version disponible — toucher pour actualiser</div>
+  </main>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
