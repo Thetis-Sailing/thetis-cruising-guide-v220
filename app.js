@@ -109,10 +109,9 @@ function showDetail(id){
         <p class="thetis-comment${r.notesThetis?'':' is-draft'}">${r.notesThetis?esc(String(r.notesThetis).replace(/\s+/g,' ').trim()):'Commentaire THETIS en cours de rédaction...'}</p>
       </section>
 
-      ${r.usage?`<section class="thetis-section notes-section"><h3>Usage recommandé</h3><p>${esc(r.usage)}</p></section>`:''}
-      ${warningHtml}
+     
 
-      <footer class="profile-disclaimer"><span>ⓘ</span><p>Les informations sont fournies à titre indicatif et doivent toujours être vérifiées avec les cartes officielles, les instructions nautiques et les conditions météorologiques du moment.</p></footer>
+     <footer class="profile-disclaimer important"><span>⚠️</span><p><strong>IMPORTANT</strong><br>Les informations de <strong>THETIS</strong> sont fournies à titre indicatif. <strong>Une vérification sur Navionics est indispensable avant toute navigation</strong>, ainsi qu'avec les cartes marines officielles, les Instructions nautiques et les conditions météorologiques du moment.</p></footer>
     </article>`;
   $('#favoriteBtn').onclick=()=>toggleFavorite(id);
   $('#detailSheet').classList.add('open');
