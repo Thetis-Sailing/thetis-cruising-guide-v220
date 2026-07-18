@@ -56,3 +56,11 @@ Modification unique appliquée à la version stable 2.3.0 :
 - intégration complète aux modes Jour et Nuit ;
 - aucune autre modification de la PWA.
 
+
+## Version 2.4.1 — position du Commentaire THETIS
+
+Correctif unique appliqué à la version 2.4.0 :
+
+- déplacement de la section **💬 Commentaire THETIS** immédiatement après la section **À terre** ;
+- style, contenu et fonctionnement inchangés ;
+- aucune autre modification de la PWA.

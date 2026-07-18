@@ -104,13 +104,13 @@ function showDetail(id){
         </div>
       </section>
 
-      ${r.usage?`<section class="thetis-section notes-section"><h3>Usage recommandé</h3><p>${esc(r.usage)}</p></section>`:''}
-      ${warningHtml}
-
       <section class="thetis-section thetis-comment-section">
         <h3>💬 Commentaire THETIS</h3>
         <p class="thetis-comment${r.notesThetis?'':' is-draft'}">${r.notesThetis?esc(String(r.notesThetis).replace(/\s+/g,' ').trim()):'Commentaire THETIS en cours de rédaction...'}</p>
       </section>
+
+      ${r.usage?`<section class="thetis-section notes-section"><h3>Usage recommandé</h3><p>${esc(r.usage)}</p></section>`:''}
+      ${warningHtml}
 
       <footer class="profile-disclaimer"><span>ⓘ</span><p>Les informations sont fournies à titre indicatif et doivent toujours être vérifiées avec les cartes officielles, les instructions nautiques et les conditions météorologiques du moment.</p></footer>
     </article>`;

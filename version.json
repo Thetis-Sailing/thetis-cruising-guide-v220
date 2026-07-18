@@ -1,5 +1,5 @@
 {
-  "version": "2.4.0",
+  "version": "2.4.1",
   "database": "database/THETIS_Database_MASTER.xlsx",
   "sheet": "Base_THETIS_MASTER",
   "records": 183,
