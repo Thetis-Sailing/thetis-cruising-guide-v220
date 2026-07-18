@@ -37,3 +37,11 @@ Fiche THETIS reconstruite fidèlement selon la maquette validée : présentation
 
 ## Modification v2.2.4
 Le panneau Recherche & filtres sur mobile est remonté d’environ 1 cm supplémentaire à partir de la v2.2.3. Aucune autre fonctionnalité n’est modifiée.
+
+
+## Version 2.3.0 — enrichissement du bloc Services
+
+- Ajout de la colonne **Téléphone** lue depuis `THETIS_Database_MASTER.xlsx`.
+- Bloc **Services** compact en grille de 3 colonnes et 3 lignes : VHF, Téléphone, Carburant, Eau, Électricité, Douches, Laverie, Déchets et Réparation.
+- Bloc **À terre** en 3 colonnes : Wi-Fi, Supermarché et Restaurant / Snack.
+- Toutes les améliorations validées des versions 2.2.1 à 2.2.5 sont conservées.

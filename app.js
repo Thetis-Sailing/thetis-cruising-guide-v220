@@ -84,18 +84,23 @@ function showDetail(id){
         <h3>Services</h3>
         <div class="service-grid">
           <div><span>📻</span><small>VHF</small><strong>${esc(clean(r.vhf))}</strong></div>
+          <div><span>☎</span><small>Téléphone</small><strong>${esc(clean(r.telephone))}</strong></div>
           <div><span>⛽</span><small>Carburant</small><strong>${esc(clean(e.carburant))}</strong></div>
           <div><span>💧</span><small>Eau</small><strong>${esc(clean(e.eau))}</strong></div>
           <div><span>⚡</span><small>Électricité</small><strong>${esc(clean(e.electricite))}</strong></div>
+          <div><span>🚿</span><small>Douches</small><strong>${esc(clean(e.douches))}</strong></div>
+          <div><span>🧺</span><small>Laverie</small><strong>${esc(clean(e.laverie))}</strong></div>
+          <div><span>♻</span><small>Déchets</small><strong>${esc(clean(e.dechets))}</strong></div>
+          <div><span>🔧</span><small>Réparation</small><strong>${esc(clean(e.chantierReparations))}</strong></div>
         </div>
       </section>
 
       <section class="thetis-section">
         <h3>À terre</h3>
         <div class="shore-grid">
+          <div><span>📶</span><small>Wi-Fi</small><strong>${esc(clean(e.wifi))}</strong></div>
           <div><span>🛒</span><small>Supermarché</small><strong>${esc(clean(r.supermarche))}</strong></div>
           <div><span>🍴</span><small>Restaurant / Snack</small><strong>${esc(clean(r.restaurant))}</strong></div>
-          <div><span>☕</span><small>Café</small><strong>${esc(clean(e.cafe||e.bar||r.cafe))}</strong></div>
         </div>
       </section>
 
@@ -130,7 +135,7 @@ function excelRowToRecord(row,index){
     lat:num(row.Latitude),lon:num(row.Longitude),note:num(row['Note /5']),
     protections,profondeurMin:num(row['Prof. min']),profondeurMax:num(row['Prof. max']),
     fond:text(row.Fond),tenue:text(row['Tenue estimée']),aussieres:text(row['Aussières']),
-    vhf:text(row['Canal VHF']),supermarche:text(row['Supermarché']),restaurant:text(row['Restaurant / Snack']),
+    vhf:text(row['Canal VHF']),telephone:text(row['Téléphone']),supermarche:text(row['Supermarché']),restaurant:text(row['Restaurant / Snack']),
     notesThetis:text(row['Notes THETIS']),usage:text(row['Usage recommandé']),
     precisionPosition:text(row['Précision position']),avertissementProtection:text(row['Avertissement protection']),
     avertissement:text(row['Avertissement']),
