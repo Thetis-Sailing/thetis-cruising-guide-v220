@@ -1,8 +1,8 @@
 {
-  "version": "2.3.0",
+  "version": "2.4.0",
   "database": "database/THETIS_Database_MASTER.xlsx",
   "sheet": "Base_THETIS_MASTER",
   "records": 183,
-  "schema": "2.3",
+  "schema": "2.4",
   "compatibleWith": "2.0"
 }

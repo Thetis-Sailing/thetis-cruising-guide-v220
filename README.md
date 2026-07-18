@@ -45,3 +45,14 @@ Le panneau Recherche & filtres sur mobile est remonté d’environ 1 cm supplém
 - Bloc **Services** compact en grille de 3 colonnes et 3 lignes : VHF, Téléphone, Carburant, Eau, Électricité, Douches, Laverie, Déchets et Réparation.
 - Bloc **À terre** en 3 colonnes : Wi-Fi, Supermarché et Restaurant / Snack.
 - Toutes les améliorations validées des versions 2.2.1 à 2.2.5 sont conservées.
+
+## Version 2.4.0 — Commentaire THETIS
+
+Modification unique appliquée à la version stable 2.3.0 :
+
+- ajout, en fin de fiche, de la section **💬 Commentaire THETIS** ;
+- affichage du contenu de la colonne **Notes THETIS** sous forme d’un paragraphe continu ;
+- affichage de *« Commentaire THETIS en cours de rédaction... »* lorsque la cellule est vide ;
+- intégration complète aux modes Jour et Nuit ;
+- aucune autre modification de la PWA.
+
