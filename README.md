@@ -1,4 +1,4 @@
-# THETIS v2.2.0 — Cruising Guide
+# THETIS v2.2.1 — Cruising Guide
 
 Version fusionnée construite à partir de la PWA fonctionnelle existante.
 
@@ -26,3 +26,8 @@ Fiche nautique remise au format convenu : coordonnées degrés/minutes, tableau 
 
 ## Version 2.2.0
 Fiche THETIS reconstruite fidèlement selon la maquette validée : présentation claire, protections par secteur, caractéristiques, services, informations à terre, notes et alertes.
+
+
+## Correctif v2.2.1
+
+- Sur téléphone, l’ouverture du panneau des filtres ne place plus automatiquement le curseur dans le champ Recherche. Le clavier ne s’ouvre que lorsque l’utilisateur touche volontairement ce champ.

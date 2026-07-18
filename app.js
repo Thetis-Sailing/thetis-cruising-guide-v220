@@ -110,7 +110,7 @@ function showDetail(id){
 }
 
 function toggleFavorite(id){state.favorites.has(id)?state.favorites.delete(id):state.favorites.add(id);localStorage.setItem('thetis-favorites',JSON.stringify([...state.favorites]));showDetail(id);applyFilters();}
-function openFiltersMobile(){if(innerWidth<=760){$('#filtersPanel').classList.add('open');$('#panelBackdrop').classList.add('show');$('#filtersToggle').setAttribute('aria-expanded','true');setTimeout(()=>$('#searchInput').focus(),120);}}
+function openFiltersMobile(){if(innerWidth<=760){$('#filtersPanel').classList.add('open');$('#panelBackdrop').classList.add('show');$('#filtersToggle').setAttribute('aria-expanded','true');}}
 function closeFiltersMobile(){if(innerWidth<=760){$('#filtersPanel').classList.remove('open');$('#panelBackdrop').classList.remove('show');$('#filtersToggle').setAttribute('aria-expanded','false');}}
 function resetFilters(){$('#searchInput').value='';$('#zoneFilter').value='';$('#typeFilter').value='';['supermarketFilter','restaurantFilter','vhfFilter','favoritesFilter'].forEach(id=>$('#'+id).checked=false);applyFilters();state.map.setView([36.8,27.8],7);}
 function locateUser(){if(!navigator.geolocation){alert('Géolocalisation indisponible.');return;}navigator.geolocation.getCurrentPosition(p=>{const ll=[p.coords.latitude,p.coords.longitude];if(state.userMarker)state.userMarker.remove();state.userMarker=L.circleMarker(ll,{radius:8,color:'#fff',weight:3,fillColor:'#26c6e9',fillOpacity:1}).addTo(state.map);state.map.setView(ll,12);},()=>alert('Impossible d’obtenir votre position.'));}
