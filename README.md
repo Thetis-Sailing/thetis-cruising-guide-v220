@@ -1,6 +1,8 @@
-# THETIS v2.2.1 — Cruising Guide
+# THETIS v2.2.5 — panneau mobile +0,5 cm
 
-Version fusionnée construite à partir de la PWA fonctionnelle existante.
+Cette version est construite directement à partir de la v2.2.4 validée.
+
+Modification unique : sur téléphone, le panneau « Recherche & filtres » est remonté d'environ 0,5 cm supplémentaire. Le bas du panneau reste inchangé.
 
 ## Évolution principale
 

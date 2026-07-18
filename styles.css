@@ -118,11 +118,11 @@ body.night .warning-list span{
 @media(max-width:760px){.detail-sheet{left:4px;right:4px;bottom:4px;width:auto;max-height:91vh;border-radius:18px}.thetis-profile{padding:17px 14px}.profile-heading h2{font-size:25px}.profile-heading p{font-size:13px}.profile-favorite{right:51px;top:13px}.coordinates-row strong{font-size:18px}.wind-matrix{grid-template-columns:repeat(4,1fr)}.wind-box:nth-child(4){border-right:0}.wind-box:nth-child(-n+4){border-bottom:1px solid #d7e0e8}.feature-grid{grid-template-columns:1fr 1fr}.feature-card{padding:9px;gap:8px}.feature-card>span{font-size:22px;width:27px}.service-grid{grid-template-columns:repeat(2,1fr)}.shore-grid{grid-template-columns:1fr 1fr}.shore-grid>div:last-child{grid-column:1/-1}.thetis-section{margin-top:16px}.thetis-section h3{font-size:14px}}
 @media(max-width:390px){.feature-grid{grid-template-columns:1fr}.coordinates-row strong{font-size:16px}.profile-heading h2{font-size:23px}}
 
-/* THETIS v2.2.4 — panneau mobile remonté d'environ 1 cm supplémentaire
-   à partir de la v2.2.3. Le bas reste fixé à 8 px ; la hauteur disponible
-   totale du panneau et de sa liste de résultats est augmentée de 76 px
+/* THETIS v2.2.5 — panneau mobile remonté d'environ 0,5 cm supplémentaire
+   à partir de la v2.2.4. Le bas reste fixé à 8 px ; la hauteur disponible
+   totale du panneau et de sa liste de résultats est augmentée de 95 px
    par rapport à la v2.2.2. */
 @media(max-width:760px){
-  .filters-panel{max-height:calc(58vh + 76px)}
-  .results-list{max-height:calc(22vh + 76px)}
+  .filters-panel{max-height:calc(58vh + 95px)}
+  .results-list{max-height:calc(22vh + 95px)}
 }
