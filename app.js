@@ -107,7 +107,7 @@ function showDetail(id){
       <section class="thetis-section thetis-comment-section">
         <h3>Commentaire THETIS</h3>
         <p class="thetis-comment${r.notesThetis?'':' is-draft'}">${r.notesThetis?esc(String(r.notesThetis).replace(/\s+/g,' ').trim()):'Commentaire THETIS en cours de rédaction...'}</p>
-      </section>
+      </section> 
 
      
 
