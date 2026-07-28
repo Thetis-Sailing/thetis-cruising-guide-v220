@@ -1,10 +1,8 @@
 {
-  "version": "2.5.0",
+  "version": "2.4.3",
   "database": "database/THETIS_Database_MASTER.xlsx",
-  "sheets": ["Base_THETIS_MASTER", "Approches"],
-  "primarySheet": "Base_THETIS_MASTER",
+  "sheet": "Base_THETIS_MASTER",
   "records": 183,
-  "schema": "2.5",
-  "compatibleWith": "2.4.3",
-  "feature": "multi-sheet-approaches"
+  "schema": "2.4",
+  "compatibleWith": "2.0"
 }

@@ -187,12 +187,3 @@ body.night .profile-disclaimer.important{
 body.night .profile-disclaimer.important strong{
   color:#ffe6bf;
 }
-
-/* THETIS v2.5.0 — lecture multi-onglets / Approches */
-.approach-list{display:grid;gap:10px}
-.approach-card{padding:12px;border:1px solid rgba(108,199,229,.24);border-radius:12px;background:rgba(7,27,42,.035)}
-.approach-card p{margin:0 0 7px;line-height:1.45}
-.approach-card p:last-child{margin-bottom:0}
-.approach-meta{font-size:.82rem;opacity:.75}
-.approach-warning{padding-left:9px;border-left:3px solid #d99535}
-body.night .approach-card{background:rgba(255,255,255,.035);border-color:rgba(108,199,229,.2)}
