@@ -218,7 +218,7 @@ body.night .weather-foot button{background:#16384f;border-color:#4b708b;color:#f
 @media(max-width:390px){.weather-card small,.weather-card span{font-size:8.5px}.weather-card strong{font-size:10px}}
 
 
-/* THETIS v2.5.3 — raccourcis externes Météo Consult Marine / Windy */
+/* THETIS v2.5.10 — raccourci externe Windy Forecast */
 .weather-tools{
   display:flex;
   justify-content:center;
@@ -244,7 +244,6 @@ body.night .weather-foot button{background:#16384f;border-color:#4b708b;color:#f
   height:22px;
   display:block;
 }
-.weather-tool-btn.meteo-consult{color:#165a8f}
 .weather-tool-btn.windy{color:#0a7b8c}
 .weather-tool-btn:hover,
 .weather-tool-btn:focus-visible{
@@ -279,7 +278,7 @@ body.night .weather-tool-btn:focus-visible{
 }
 
 
-/* THETIS v2.5.4 — ligne unique Open-Meteo / Actualiser / Météo Consult / Windy */
+/* THETIS v2.5.10 — ligne unique Open-Meteo / Actualiser / Windy Forecast */
 .weather-actions{
   display:flex;
   align-items:center;
@@ -325,13 +324,22 @@ body.night .weather-tool-btn:focus-visible{
   flex:0 0 auto;
 }
 .weather-actions .weather-tool-btn{
-  width:38px;
-  height:38px;
+  min-height:38px;
+  width:auto;
+  padding:0 10px;
+  gap:7px;
   border-radius:11px;
 }
 .weather-actions .weather-tool-btn svg{
   width:20px;
   height:20px;
+  flex:0 0 auto;
+}
+.weather-tool-label{
+  font-size:10px;
+  font-weight:600;
+  line-height:1;
+  white-space:nowrap;
 }
 body.night .weather-source-link{color:#ff8a80}
 body.night .weather-actions-left button{
@@ -349,14 +357,17 @@ body.night .weather-actions-left button{
   }
   .weather-actions .weather-tools{gap:5px}
   .weather-actions .weather-tool-btn{
-    width:36px;
-    height:36px;
+    min-height:36px;
+    width:auto;
+    padding:0 8px;
+    gap:5px;
     border-radius:10px;
   }
   .weather-actions .weather-tool-btn svg{
     width:19px;
     height:19px;
   }
+  .weather-tool-label{font-size:9px}
 }
 @media(max-width:360px){
   .weather-actions{gap:4px}
@@ -368,9 +379,12 @@ body.night .weather-actions-left button{
   }
   .weather-actions .weather-tools{gap:4px}
   .weather-actions .weather-tool-btn{
-    width:34px;
-    height:34px;
+    min-height:34px;
+    width:auto;
+    padding:0 6px;
+    gap:4px;
   }
+  .weather-tool-label{font-size:8.5px}
 }
 
 

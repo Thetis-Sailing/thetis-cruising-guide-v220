@@ -105,31 +105,20 @@ function navilyLocationButtonHtml(r){
   </a>`;
 }
 function weatherToolsHtml(r){
-  const meteoConsultUrl='https://marine.meteoconsult.fr/carte-marine/carte-interactive';
   const windyUrl=`https://www.windy.com/${r.lat}/${r.lon}`;
 
-  return `<div class="weather-tools" aria-label="Outils météo externes">
-    <a class="weather-tool-btn meteo-consult"
-       href="${meteoConsultUrl}" target="_blank" rel="noopener"
-       title="Ouvrir Météo Consult Marine"
-       aria-label="Ouvrir Météo Consult Marine">
-      <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor"
-           stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-        <circle cx="12" cy="12" r="8.5"></circle>
-        <path d="M14.8 9.2l-1.8 5.6-5.6 1.8 1.8-5.6 5.6-1.8z"></path>
-        <circle cx="12" cy="12" r="1.2" fill="currentColor" stroke="none"></circle>
-      </svg>
-    </a>
+  return `<div class="weather-tools" aria-label="Outil météo externe">
     <a class="weather-tool-btn windy"
        href="${windyUrl}" target="_blank" rel="noopener"
-       title="Ouvrir Windy"
-       aria-label="Ouvrir Windy">
+       title="Ouvrir Windy Forecast"
+       aria-label="Ouvrir Windy Forecast">
       <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor"
            stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
         <path d="M4 9.5h9.5a2.5 2.5 0 1 0-2.3-3.5"></path>
         <path d="M3 14h13.5a2.5 2.5 0 1 1-2.4 3.5"></path>
         <path d="M4 18.5h7"></path>
       </svg>
+      <span class="weather-tool-label">Windy Forecast</span>
     </a>
   </div>`;
 }

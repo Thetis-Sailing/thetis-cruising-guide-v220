@@ -130,3 +130,13 @@ L’avertissement météo a été retiré de la section **MÉTÉO** et regroupé
 - S128 — Agios Georgios Dysalonas — https://www.navily.com/fr/mouillage/agios-georgios/16148
 - S134 — Eristos — https://www.navily.com/fr/mouillage/tilos/31939
 - S137 — Lethra — https://www.navily.com/fr/mouillage/a2cc8a7637313777cd4d0cd9d4603580/66582
+
+
+## v2.5.10 — MÉTÉO : WINDY FORECAST
+
+Évolution d'affichage uniquement :
+
+- suppression du raccourci **Météo Consult Marine** ;
+- conservation du raccourci Windy avec le libellé **Windy Forecast** à côté de l’icône ;
+- maintien des fonctionnalités et liens Navily de la v2.5.9 ;
+- nouveau cache PWA `thetis-v2.5.10` pour forcer la mise à jour après publication.
