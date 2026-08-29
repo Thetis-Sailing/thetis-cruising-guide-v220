@@ -54,18 +54,17 @@ async function loadWeather(r){
     const localTime=time&&time.includes('T')?time.split('T')[1]:'';
     panel.innerHTML=`
       <div class="weather-grid">
-        <div class="weather-card"><small>Vent</small><strong>${fmtWeather(w.wind_speed_10m,0,' kt')}</strong><span>${compass16(windDir)}${Number.isFinite(windDir)?` · ${Math.round(windDir)}°`:''}</span></div>
-        <div class="weather-card"><small>Rafales</small><strong>${fmtWeather(w.wind_gusts_10m,0,' kt')}</strong><span>à 10 m</span></div>
-        <div class="weather-card"><small>Pression</small><strong>${fmtWeather(w.pressure_msl,0,' hPa')}</strong><span>${fmtWeather(w.temperature_2m,0,' °C')} air</span></div>
-        <div class="weather-card"><small>Vagues</small><strong>${fmtWeather(m.wave_height,1,' m')}</strong><span>${compass16(waveDir)}${Number.isFinite(waveDir)?` · ${Math.round(waveDir)}°`:''}</span></div>
-        <div class="weather-card"><small>Période</small><strong>${fmtWeather(m.wave_period,1,' s')}</strong><span>houle / mer</span></div>
-        <div class="weather-card"><small>Temp. mer</small><strong>${fmtWeather(m.sea_surface_temperature,0,' °C')}</strong><span>${localTime?`mise à jour ${esc(localTime)}`:'modèle météo'}</span></div>
+        <div class="weather-card"><i>🌬️</i><small>Vent</small><strong>${fmtWeather(w.wind_speed_10m,0,' kt')}</strong><span>${compass16(windDir)}${Number.isFinite(windDir)?` · ${Math.round(windDir)}°`:''}</span></div>
+        <div class="weather-card"><i>💨</i><small>Rafales</small><strong>${fmtWeather(w.wind_gusts_10m,0,' kt')}</strong><span>à 10 m</span></div>
+        <div class="weather-card"><i>🌡️</i><small>Air / pression</small><strong>${fmtWeather(w.temperature_2m,0,' °C')}</strong><span>${fmtWeather(w.pressure_msl,0,' hPa')}</span></div>
+        <div class="weather-card"><i>🌊</i><small>Vagues</small><strong>${fmtWeather(m.wave_height,1,' m')}</strong><span>${compass16(waveDir)}${Number.isFinite(waveDir)?` · ${Math.round(waveDir)}°`:''}</span></div>
+        <div class="weather-card"><i>⏱️</i><small>Période</small><strong>${fmtWeather(m.wave_period,1,' s')}</strong><span>houle / mer</span></div>
+        <div class="weather-card"><i>🌡️</i><small>Temp. mer</small><strong>${fmtWeather(m.sea_surface_temperature,0,' °C')}</strong><span>${localTime?`mise à jour ${esc(localTime)}`:'modèle météo'}</span></div>
       </div>
       <div class="weather-foot">
         <span>Données indicatives · <a href="https://open-meteo.com/" target="_blank" rel="noopener">Open‑Meteo</a></span>
         <button id="weatherRefresh" type="button">Actualiser</button>
-      </div>
-      <p class="weather-warning">⚠ Vérifier les prévisions marines officielles et vos outils météo habituels avant toute navigation.</p>`;
+      </div>`;
     const refresh=$('#weatherRefresh');if(refresh)refresh.onclick=()=>{panel.innerHTML='<div class="weather-status">Actualisation…</div>';loadWeather(r);};
   }catch(e){
     console.warn('Météo THETIS',e);
@@ -187,7 +186,7 @@ function showDetail(id){
 
      
 
-     <footer class="profile-disclaimer important"><span>⚠️</span><p><strong>IMPORTANT</strong><br>Les informations de <strong>THETIS</strong> sont fournies à titre indicatif. <strong>Une vérification sur Navionics est indispensable avant toute navigation</strong>, ainsi qu'avec les cartes marines officielles, les Instructions nautiques et les conditions météorologiques du moment.</p></footer>
+     <footer class="profile-disclaimer important"><span>⚠️</span><p><strong>IMPORTANT</strong><br>Les informations de <strong>THETIS</strong> sont fournies à titre indicatif. <strong>Une vérification sur Navionics est indispensable avant toute navigation</strong>, ainsi qu'avec les cartes marines officielles et les Instructions nautiques. Les données météorologiques sont indicatives : vérifiez également les prévisions marines officielles et vos outils météo habituels.</p></footer>
     </article>`;
   $('#favoriteBtn').onclick=()=>toggleFavorite(id);
   $('#detailSheet').classList.add('open');
