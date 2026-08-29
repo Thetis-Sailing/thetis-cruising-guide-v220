@@ -26,6 +26,25 @@ function compass16(deg){
 function fmtWeather(v,digits=0,suffix=''){
   const n=Number(v);return Number.isFinite(n)?`${n.toFixed(digits).replace('.',',')}${suffix}`:'—';
 }
+function navilyLocationButtonHtml(r){
+  // Test Navily v2.5.5 : uniquement la fiche THETIS Pedi (S122).
+  // Lien public exact Navily validé pour Pedi.
+  if(r.id!=='S122')return'';
+  return `<a class="location-action-btn navily-btn"
+       target="_blank" rel="noopener"
+       href="https://www.navily.com/mouillage/pedi/22008"
+       title="Ouvrir Pedi dans Navily"
+       aria-label="Ouvrir Pedi dans Navily">
+    <svg viewBox="0 0 24 24" aria-hidden="true" fill="none"
+         stroke="currentColor" stroke-width="1.8"
+         stroke-linecap="round" stroke-linejoin="round">
+      <path d="M12 21s6-5.2 6-11a6 6 0 1 0-12 0c0 5.8 6 11 6 11z"></path>
+      <path d="M12 7v6"></path>
+      <path d="M9.4 10.8c.7 1.7 1.6 2.6 2.6 2.6s1.9-.9 2.6-2.6"></path>
+      <path d="M9.6 8.9h4.8"></path>
+    </svg>
+  </a>`;
+}
 function weatherToolsHtml(r){
   const meteoConsultUrl='https://marine.meteoconsult.fr/carte-marine/carte-interactive';
   const windyUrl=`https://www.windy.com/${r.lat}/${r.lon}`;
@@ -167,8 +186,15 @@ function showDetail(id){
       <section class="thetis-section location-section">
         <h3>Localisation</h3>
         <div class="coordinates-row">
-          <div><small>Coordonnées</small><strong>${coordText}</strong></div>
-          <a target="_blank" rel="noopener" href="https://www.google.com/maps?q=${lat},${lon}" aria-label="Ouvrir dans Google Maps">⌖</a>
+          <div class="coordinates-data"><small>Coordonnées</small><strong>${coordText}</strong></div>
+          <div class="location-actions">
+            <a class="location-action-btn maps-btn"
+               target="_blank" rel="noopener"
+               href="https://www.google.com/maps?q=${lat},${lon}"
+               title="Ouvrir dans Google Maps"
+               aria-label="Ouvrir dans Google Maps">⌖</a>
+            ${navilyLocationButtonHtml(r)}
+          </div>
         </div>
       </section>
 

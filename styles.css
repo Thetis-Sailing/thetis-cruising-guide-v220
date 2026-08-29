@@ -372,3 +372,74 @@ body.night .weather-actions-left button{
     height:34px;
   }
 }
+
+
+/* THETIS v2.5.5 TEST — accès direct Navily uniquement pour Pedi */
+.coordinates-data{min-width:0}
+.location-actions{
+  display:flex;
+  align-items:center;
+  justify-content:flex-end;
+  gap:8px;
+  flex:0 0 auto;
+}
+.coordinates-row .location-action-btn{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  width:52px;
+  height:52px;
+  border:1px solid #c7d3df;
+  border-radius:12px;
+  background:#fff;
+  color:#0b315f;
+  text-decoration:none;
+  box-sizing:border-box;
+  transition:background .15s ease,color .15s ease,border-color .15s ease,transform .12s ease;
+}
+.coordinates-row .maps-btn{font-size:27px}
+.coordinates-row .navily-btn svg{
+  width:24px;
+  height:24px;
+  display:block;
+}
+.coordinates-row .location-action-btn:hover,
+.coordinates-row .location-action-btn:focus-visible{
+  background:#0b477f;
+  color:#fff;
+  border-color:#0b477f;
+  transform:translateY(-1px);
+}
+.coordinates-row .location-action-btn:active{transform:translateY(0)}
+body.night .coordinates-row .location-action-btn{
+  background:#2b0e0d;
+  border-color:#71312e;
+  color:#ff8a80;
+}
+body.night .coordinates-row .location-action-btn:hover,
+body.night .coordinates-row .location-action-btn:focus-visible{
+  background:#ff8a80;
+  border-color:#ff8a80;
+  color:#170908;
+}
+@media(max-width:760px){
+  .coordinates-row{gap:8px}
+  .location-actions{gap:7px}
+  .coordinates-row .location-action-btn{
+    width:46px;
+    height:46px;
+    border-radius:11px;
+  }
+  .coordinates-row .maps-btn{font-size:24px}
+  .coordinates-row .navily-btn svg{
+    width:22px;
+    height:22px;
+  }
+}
+@media(max-width:390px){
+  .location-actions{gap:6px}
+  .coordinates-row .location-action-btn{
+    width:44px;
+    height:44px;
+  }
+}
