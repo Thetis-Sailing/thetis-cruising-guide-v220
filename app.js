@@ -10,7 +10,7 @@ function markerIcon(r){const t=clean(r.type,'').toLowerCase();let cls='marker-mo
 function initMap(){state.map=L.map('map',{zoomControl:true,preferCanvas:true}).setView([36.8,27.8],7);L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:18,attribution:'© OpenStreetMap'}).addTo(state.map);state.layer=L.layerGroup().addTo(state.map);}
 function fillSelect(sel,vals){const el=$(sel);[...new Set(vals.filter(Boolean))].sort((a,b)=>a.localeCompare(b,'fr')).forEach(v=>el.add(new Option(v,v)));}
 function searchable(r){return `${r.nom} ${r.zone} ${r.pays} ${r.type} ${r.vhf} ${r.supermarche} ${r.restaurant} ${r.notesThetis||''}`.toLowerCase();}
-function applyFilters(){const q=$('#searchInput').value.trim().toLowerCase(),zone=$('#zoneFilter').value,type=$('#typeFilter').value;state.filtered=state.records.filter(r=>(!q||searchable(r).includes(q))&&(!zone||r.zone===zone)&&(!type||r.type===type)&&(!$('#navilyFilter').checked||Boolean(NAVILY_PORT_LINKS[r.id]))&&(!$('#restaurantFilter').checked||isYes(r.restaurant))&&(!$('#vhfFilter').checked||isKnownVhf(r.vhf))&&(!$('#favoritesFilter').checked||state.favorites.has(r.id)));renderMarkers();renderList();const label=`${state.filtered.length} fiche${state.filtered.length>1?'s':''}`;$('#resultCount').textContent=label;$('#floatingCount').textContent=state.filtered.length;}
+function applyFilters(){const q=$('#searchInput').value.trim().toLowerCase(),zone=$('#zoneFilter').value,type=$('#typeFilter').value;state.filtered=state.records.filter(r=>(!q||searchable(r).includes(q))&&(!zone||r.zone===zone)&&(!type||r.type===type)&&(!$('#navilyFilter').checked||Boolean(NAVILY_LINKS[r.id]))&&(!$('#restaurantFilter').checked||isYes(r.restaurant))&&(!$('#vhfFilter').checked||isKnownVhf(r.vhf))&&(!$('#favoritesFilter').checked||state.favorites.has(r.id)));renderMarkers();renderList();const label=`${state.filtered.length} fiche${state.filtered.length>1?'s':''}`;$('#resultCount').textContent=label;$('#floatingCount').textContent=state.filtered.length;}
 function renderMarkers(){state.layer.clearLayers();state.markers.clear();const bounds=[];state.filtered.forEach(r=>{if(!Number.isFinite(r.lat)||!Number.isFinite(r.lon))return;const m=L.marker([r.lat,r.lon],{icon:markerIcon(r)}).on('click',()=>showDetail(r.id));m.addTo(state.layer);state.markers.set(r.id,m);bounds.push([r.lat,r.lon]);});if(bounds.length&&state.filtered.length<state.records.length)state.map.fitBounds(bounds,{padding:[35,35],maxZoom:11});}
 function serviceTag(v,label){const cls=isYes(v)?'yes':(!v||/vérifier|documenter/i.test(v)?'unknown':'');return `<span class="tag ${cls}">${label}: ${esc(clean(v))}</span>`;}
 function renderList(){const list=$('#resultsList');list.innerHTML='';state.filtered.slice(0,150).forEach(r=>{const card=document.createElement('article');card.className='result-card';card.innerHTML=`<div class="result-title"><span>${esc(r.nom)}</span><span>${state.favorites.has(r.id)?'★':''}</span></div><div class="result-meta">${esc(r.zone)} · ${esc(r.type)}</div><div class="mini-tags">${serviceTag(r.vhf,'VHF')}${serviceTag(r.supermarche,'Courses')}${serviceTag(r.restaurant,'Resto')}</div>`;card.onclick=()=>{showDetail(r.id);const m=state.markers.get(r.id);if(m)state.map.setView(m.getLatLng(),Math.max(state.map.getZoom(),12));closeFiltersMobile();};list.appendChild(card);});}
@@ -26,7 +26,7 @@ function compass16(deg){
 function fmtWeather(v,digits=0,suffix=''){
   const n=Number(v);return Number.isFinite(n)?`${n.toFixed(digits).replace('.',',')}${suffix}`:'—';
 }
-const NAVILY_PORT_LINKS={
+const NAVILY_LINKS={
   "S001":"https://www.navily.com/port/ic-cesme-marina/1627",
   "S002":"https://www.navily.com/port/setur-cesme-marina/1626",
   "S007":"https://www.navily.com/port/alacati-marina/1628",
@@ -43,8 +43,12 @@ const NAVILY_PORT_LINKS={
   "S061":"https://www.navily.com/port/marmaris-yacht-marine/1651",
   "S062":"https://www.navily.com/port/netsel-marmaris-marina/1650",
   "S067":"https://www.navily.com/mouillage/serce-limani-north-sparrow-bay/14416",
+  "S068":"https://www.navily.com/fr/mouillage/bozukkale/44046",
+  "S069":"https://www.navily.com/mouillage/700fe688ff2970d633ff04c9b7f7cdd4/14507",
   "S073":"https://www.navily.com/port/mucev-marina/12223",
   "S075":"https://www.navily.com/port/skopea-marina/1655",
+  "S076":"https://www.navily.com/fr/mouillage/boynuz-buku/43112",
+  "S078":"https://www.navily.com/fr/mouillage/tersane-island/16733",
   "S083":"https://www.navily.com/port/ece-saray-marina/1656",
   "S086":"https://www.navily.com/mouillage/yesilkoey/21035",
   "S087":"https://www.navily.com/port/setur-kas-marina/1645",
@@ -52,9 +56,20 @@ const NAVILY_PORT_LINKS={
   "S095":"https://www.navily.com/port/setur-finike-marina/1659",
   "S109":"https://www.navily.com/port/mandraki/1536",
   "S110":"https://www.navily.com/port/kolona-port/24543",
+  "S112":"https://www.navily.com/fr/mouillage/faliraki-beach/56944",
+  "S113":"https://www.navily.com/mouillage/ladiko-bay/17097",
+  "S114":"https://www.navily.com/fr/mouillage/anthony-quinns-bay/39902",
+  "S115":"https://www.navily.com/fr/mouillage/5c0b052354b12706b6f833c28de43a4e/16150",
+  "S116":"https://www.navily.com/mouillage/saint-pauls-bay/19825",
   "S120":"https://www.navily.com/mouillage/kamiros/30585",
   "S121":"https://www.navily.com/port/symi-public-port/1550",
+  "S122":"https://www.navily.com/fr/mouillage/pedi/22008",
+  "S123":"https://www.navily.com/fr/mouillage/f047f42631dfe5b29465d5ae905a3bb9/16275",
+  "S125":"https://www.navily.com/mouillage/8022185c08ce8455893a9b989e1dcff6/15248",
+  "S128":"https://www.navily.com/fr/mouillage/agios-georgios/16148",
   "S133":"https://www.navily.com/port/luxury-marina-of-tilos/21997",
+  "S134":"https://www.navily.com/fr/mouillage/tilos/31939",
+  "S137":"https://www.navily.com/fr/mouillage/a2cc8a7637313777cd4d0cd9d4603580/66582",
   "S138":"https://www.navily.com/port/chalki/1964",
   "S145":"https://www.navily.com/port/port-of-palon/1549",
   "S146":"https://www.navily.com/port/nisyros-mandraki-port/31319",
@@ -72,7 +87,7 @@ const NAVILY_PORT_LINKS={
   "S198":"https://www.navily.com/port/agathonisi/12015"
 };
 function navilyLocationButtonHtml(r){
-  const url=NAVILY_PORT_LINKS[r.id];
+  const url=NAVILY_LINKS[r.id];
   if(!url)return'';
   return `<a class="location-action-btn navily-btn"
        target="_blank" rel="noopener"

@@ -103,3 +103,30 @@ L’avertissement météo a été retiré de la section **MÉTÉO** et regroupé
 - dans « Recherche & Filtres », le filtre « Supermarché » est remplacé par « Navily » ;
 - lorsque « Navily » est coché, seules les fiches disposant d'un lien Navily direct sont affichées ;
 - les informations Supermarché restent présentes dans les fiches et dans la base ; seul le filtre est remplacé.
+
+## v2.5.9 — CAMPAGNE PILOTE NAVILY MOUILLAGES
+
+- conserve intégralement la v2.5.8 ;
+- ajoute 15 mouillages disposant d'un accès direct vers leur fiche Navily ;
+- conserve les 43 liens existants vers ports / marinas / lieux déjà validés ;
+- total : 58 fiches THETIS avec accès Navily direct ;
+- le filtre « Navily » affiche désormais toutes les fiches liées, ports comme mouillages ;
+- aucune donnée Navily n'est copiée dans THETIS : seuls les liens directs publics sont utilisés ;
+- aucune modification de la base Excel.
+
+### 15 mouillages pilotes
+- S068 — Bozukkale — https://www.navily.com/fr/mouillage/bozukkale/44046
+- S069 — Ekincik — https://www.navily.com/mouillage/700fe688ff2970d633ff04c9b7f7cdd4/14507
+- S076 — Boynuzbükü — https://www.navily.com/fr/mouillage/boynuz-buku/43112
+- S078 — Tersane Adası — https://www.navily.com/fr/mouillage/tersane-island/16733
+- S112 — Faliraki — https://www.navily.com/fr/mouillage/faliraki-beach/56944
+- S113 — Ladiko — https://www.navily.com/mouillage/ladiko-bay/17097
+- S114 — Anthony Quinn Bay — https://www.navily.com/fr/mouillage/anthony-quinns-bay/39902
+- S115 — Lindos — https://www.navily.com/fr/mouillage/5c0b052354b12706b6f833c28de43a4e/16150
+- S116 — St Paul’s Bay — https://www.navily.com/mouillage/saint-pauls-bay/19825
+- S122 — Pedi — https://www.navily.com/fr/mouillage/pedi/22008
+- S123 — Nanou — https://www.navily.com/fr/mouillage/f047f42631dfe5b29465d5ae905a3bb9/16275
+- S125 — Panormitis — https://www.navily.com/mouillage/8022185c08ce8455893a9b989e1dcff6/15248
+- S128 — Agios Georgios Dysalonas — https://www.navily.com/fr/mouillage/agios-georgios/16148
+- S134 — Eristos — https://www.navily.com/fr/mouillage/tilos/31939
+- S137 — Lethra — https://www.navily.com/fr/mouillage/a2cc8a7637313777cd4d0cd9d4603580/66582

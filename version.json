@@ -1,5 +1,5 @@
 {
-  "version": "2.5.8",
+  "version": "2.5.9",
   "database": "database/THETIS_Database_MASTER.xlsx",
   "sheets": [
     "Base_THETIS_MASTER",
@@ -8,6 +8,6 @@
   "primarySheet": "Base_THETIS_MASTER",
   "records": 183,
   "schema": "2.5",
-  "compatibleWith": "2.5.7",
-  "feature": "replace-supermarket-filter-with-navily"
+  "compatibleWith": "2.5.8",
+  "feature": "navily-pilot-15-anchorages-total-58-links"
 }
