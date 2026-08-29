@@ -33,12 +33,14 @@ Remplacer le contenu du dossier `PWA` du dépôt GitHub par le contenu de ce dos
 
 Après publication, tester d'abord sur ordinateur, puis actualiser la PWA installée sur téléphone. Le nouveau cache porte le nom `thetis-v2.5.0`.
 
-## v2.5.1 — Section MÉTÉO
+## v2.5.2 — Section MÉTÉO + accès externes
 
 Une section **MÉTÉO** est insérée après **Localisation**. Elle utilise les coordonnées déjà présentes dans la fiche et interroge Open‑Meteo uniquement lorsque la fiche est ouverte et qu’une connexion Internet est disponible.
+
+La v2.5.2 ajoute deux boutons icônes sous les données Open‑Meteo : **Météo Consult Marine** et **Windy**. Le bouton Windy ouvre la carte sur les coordonnées de la fiche sélectionnée.
 
 Affichage : vent en nœuds, rafales, direction, pression/température de l’air, hauteur et direction des vagues, période et température de la mer. Aucune nouvelle colonne Excel n’est requise.
 
 Les données météo sont indicatives et ne remplacent pas les prévisions marines officielles ni les outils habituels du navigateur. Attribution Open‑Meteo intégrée à l’interface.
 
-Le cache de la PWA est `thetis-v2.5.1`; les réponses Open‑Meteo ne sont pas mises en cache par le Service Worker afin d’éviter d’afficher une météo ancienne.
+Le cache de la PWA est `thetis-v2.5.2`; les réponses Open‑Meteo ne sont pas mises en cache par le Service Worker afin d’éviter d’afficher une météo ancienne.
