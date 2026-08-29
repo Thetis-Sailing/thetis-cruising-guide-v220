@@ -10,7 +10,7 @@ function markerIcon(r){const t=clean(r.type,'').toLowerCase();let cls='marker-mo
 function initMap(){state.map=L.map('map',{zoomControl:true,preferCanvas:true}).setView([36.8,27.8],7);L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:18,attribution:'© OpenStreetMap'}).addTo(state.map);state.layer=L.layerGroup().addTo(state.map);}
 function fillSelect(sel,vals){const el=$(sel);[...new Set(vals.filter(Boolean))].sort((a,b)=>a.localeCompare(b,'fr')).forEach(v=>el.add(new Option(v,v)));}
 function searchable(r){return `${r.nom} ${r.zone} ${r.pays} ${r.type} ${r.vhf} ${r.supermarche} ${r.restaurant} ${r.notesThetis||''}`.toLowerCase();}
-function applyFilters(){const q=$('#searchInput').value.trim().toLowerCase(),zone=$('#zoneFilter').value,type=$('#typeFilter').value;state.filtered=state.records.filter(r=>(!q||searchable(r).includes(q))&&(!zone||r.zone===zone)&&(!type||r.type===type)&&(!$('#supermarketFilter').checked||isYes(r.supermarche))&&(!$('#restaurantFilter').checked||isYes(r.restaurant))&&(!$('#vhfFilter').checked||isKnownVhf(r.vhf))&&(!$('#favoritesFilter').checked||state.favorites.has(r.id)));renderMarkers();renderList();const label=`${state.filtered.length} fiche${state.filtered.length>1?'s':''}`;$('#resultCount').textContent=label;$('#floatingCount').textContent=state.filtered.length;}
+function applyFilters(){const q=$('#searchInput').value.trim().toLowerCase(),zone=$('#zoneFilter').value,type=$('#typeFilter').value;state.filtered=state.records.filter(r=>(!q||searchable(r).includes(q))&&(!zone||r.zone===zone)&&(!type||r.type===type)&&(!$('#navilyFilter').checked||Boolean(NAVILY_PORT_LINKS[r.id]))&&(!$('#restaurantFilter').checked||isYes(r.restaurant))&&(!$('#vhfFilter').checked||isKnownVhf(r.vhf))&&(!$('#favoritesFilter').checked||state.favorites.has(r.id)));renderMarkers();renderList();const label=`${state.filtered.length} fiche${state.filtered.length>1?'s':''}`;$('#resultCount').textContent=label;$('#floatingCount').textContent=state.filtered.length;}
 function renderMarkers(){state.layer.clearLayers();state.markers.clear();const bounds=[];state.filtered.forEach(r=>{if(!Number.isFinite(r.lat)||!Number.isFinite(r.lon))return;const m=L.marker([r.lat,r.lon],{icon:markerIcon(r)}).on('click',()=>showDetail(r.id));m.addTo(state.layer);state.markers.set(r.id,m);bounds.push([r.lat,r.lon]);});if(bounds.length&&state.filtered.length<state.records.length)state.map.fitBounds(bounds,{padding:[35,35],maxZoom:11});}
 function serviceTag(v,label){const cls=isYes(v)?'yes':(!v||/vérifier|documenter/i.test(v)?'unknown':'');return `<span class="tag ${cls}">${label}: ${esc(clean(v))}</span>`;}
 function renderList(){const list=$('#resultsList');list.innerHTML='';state.filtered.slice(0,150).forEach(r=>{const card=document.createElement('article');card.className='result-card';card.innerHTML=`<div class="result-title"><span>${esc(r.nom)}</span><span>${state.favorites.has(r.id)?'★':''}</span></div><div class="result-meta">${esc(r.zone)} · ${esc(r.type)}</div><div class="mini-tags">${serviceTag(r.vhf,'VHF')}${serviceTag(r.supermarche,'Courses')}${serviceTag(r.restaurant,'Resto')}</div>`;card.onclick=()=>{showDetail(r.id);const m=state.markers.get(r.id);if(m)state.map.setView(m.getLatLng(),Math.max(state.map.getZoom(),12));closeFiltersMobile();};list.appendChild(card);});}
@@ -26,15 +26,59 @@ function compass16(deg){
 function fmtWeather(v,digits=0,suffix=''){
   const n=Number(v);return Number.isFinite(n)?`${n.toFixed(digits).replace('.',',')}${suffix}`:'—';
 }
+const NAVILY_PORT_LINKS={
+  "S001":"https://www.navily.com/port/ic-cesme-marina/1627",
+  "S002":"https://www.navily.com/port/setur-cesme-marina/1626",
+  "S007":"https://www.navily.com/port/alacati-marina/1628",
+  "S013":"https://www.navily.com/port/setur-kusadasi-marina/1630",
+  "S014":"https://www.navily.com/port/kusadasi-quay-cesme/35005",
+  "S017":"https://www.navily.com/port/didim-marina/1631",
+  "S024":"https://www.navily.com/mouillage/asin-koyu/44679",
+  "S025":"https://www.navily.com/port/milta-bodrum-marina/1639",
+  "S026":"https://www.navily.com/port/cruise-port-bodrum-yacht-check-in-out/32877",
+  "S032":"https://www.navily.com/port/d-marin-turgutreis-marina/1637",
+  "S034":"https://www.navily.com/port/yal-kavak-marina/1636",
+  "S043":"https://www.navily.com/mouillage/english-harbour/52644",
+  "S049":"https://www.navily.com/port/datca/1646",
+  "S061":"https://www.navily.com/port/marmaris-yacht-marine/1651",
+  "S062":"https://www.navily.com/port/netsel-marmaris-marina/1650",
+  "S067":"https://www.navily.com/mouillage/serce-limani-north-sparrow-bay/14416",
+  "S073":"https://www.navily.com/port/mucev-marina/12223",
+  "S075":"https://www.navily.com/port/skopea-marina/1655",
+  "S083":"https://www.navily.com/port/ece-saray-marina/1656",
+  "S086":"https://www.navily.com/mouillage/yesilkoey/21035",
+  "S087":"https://www.navily.com/port/setur-kas-marina/1645",
+  "S093":"https://www.navily.com/mouillage/gokkaya-limani/42563",
+  "S095":"https://www.navily.com/port/setur-finike-marina/1659",
+  "S109":"https://www.navily.com/port/mandraki/1536",
+  "S110":"https://www.navily.com/port/kolona-port/24543",
+  "S120":"https://www.navily.com/mouillage/kamiros/30585",
+  "S121":"https://www.navily.com/port/symi-public-port/1550",
+  "S133":"https://www.navily.com/port/luxury-marina-of-tilos/21997",
+  "S138":"https://www.navily.com/port/chalki/1964",
+  "S145":"https://www.navily.com/port/port-of-palon/1549",
+  "S146":"https://www.navily.com/port/nisyros-mandraki-port/31319",
+  "S150":"https://www.navily.com/port/kos-marina/1423",
+  "S151":"https://www.navily.com/port/kos-port-mandraki/2055",
+  "S157":"https://www.navily.com/port/kalymnos-marina/18946",
+  "S169":"https://www.navily.com/port/lakki-town-marina/9748",
+  "S170":"https://www.navily.com/mouillage/lakki-port/25271",
+  "S174":"https://www.navily.com/port/agia-marina/19723",
+  "S181":"https://www.navily.com/port/patmos-port/33352",
+  "S185":"https://www.navily.com/mouillage/livadi-geranou/28701",
+  "S187":"https://www.navily.com/port/lipsi-marina/32966",
+  "S193":"https://www.navily.com/port/arki/24594",
+  "S196":"https://www.navily.com/port/arki/24594",
+  "S198":"https://www.navily.com/port/agathonisi/12015"
+};
 function navilyLocationButtonHtml(r){
-  // Test Navily v2.5.5 : uniquement la fiche THETIS Pedi (S122).
-  // Lien public exact Navily validé pour Pedi.
-  if(r.id!=='S122')return'';
+  const url=NAVILY_PORT_LINKS[r.id];
+  if(!url)return'';
   return `<a class="location-action-btn navily-btn"
        target="_blank" rel="noopener"
-       href="https://www.navily.com/mouillage/pedi/22008"
-       title="Ouvrir Pedi dans Navily"
-       aria-label="Ouvrir Pedi dans Navily">
+       href="${url}"
+       title="Ouvrir dans Navily"
+       aria-label="Ouvrir dans Navily">
     <svg viewBox="0 0 24 24" aria-hidden="true" fill="none"
          stroke="currentColor" stroke-width="1.8"
          stroke-linecap="round" stroke-linejoin="round">
@@ -260,10 +304,10 @@ function showDetail(id){
 function toggleFavorite(id){state.favorites.has(id)?state.favorites.delete(id):state.favorites.add(id);localStorage.setItem('thetis-favorites',JSON.stringify([...state.favorites]));showDetail(id);applyFilters();}
 function openFiltersMobile(){if(innerWidth<=760){$('#filtersPanel').classList.add('open');$('#panelBackdrop').classList.add('show');$('#filtersToggle').setAttribute('aria-expanded','true');}}
 function closeFiltersMobile(){if(innerWidth<=760){$('#filtersPanel').classList.remove('open');$('#panelBackdrop').classList.remove('show');$('#filtersToggle').setAttribute('aria-expanded','false');}}
-function resetFilters(){$('#searchInput').value='';$('#zoneFilter').value='';$('#typeFilter').value='';['supermarketFilter','restaurantFilter','vhfFilter','favoritesFilter'].forEach(id=>$('#'+id).checked=false);applyFilters();state.map.setView([36.8,27.8],7);}
+function resetFilters(){$('#searchInput').value='';$('#zoneFilter').value='';$('#typeFilter').value='';['navilyFilter','restaurantFilter','vhfFilter','favoritesFilter'].forEach(id=>$('#'+id).checked=false);applyFilters();state.map.setView([36.8,27.8],7);}
 function locateUser(){if(!navigator.geolocation){alert('Géolocalisation indisponible.');return;}navigator.geolocation.getCurrentPosition(p=>{const ll=[p.coords.latitude,p.coords.longitude];if(state.userMarker)state.userMarker.remove();state.userMarker=L.circleMarker(ll,{radius:8,color:'#fff',weight:3,fillColor:'#26c6e9',fillOpacity:1}).addTo(state.map);state.map.setView(ll,12);},()=>alert('Impossible d’obtenir votre position.'));}
 function setOnlineState(){$('#offlineBadge').classList.toggle('show',!navigator.onLine);}
-function bindUI(){let timer;$('#searchInput').addEventListener('input',()=>{clearTimeout(timer);timer=setTimeout(applyFilters,120);});['zoneFilter','typeFilter','supermarketFilter','restaurantFilter','vhfFilter','favoritesFilter'].forEach(id=>$('#'+id).addEventListener('change',applyFilters));$('#resetFilters').onclick=resetFilters;$('#filtersToggle').onclick=openFiltersMobile;$('#filtersClose').onclick=closeFiltersMobile;$('#panelBackdrop').onclick=closeFiltersMobile;$('#detailClose').onclick=()=>$('#detailSheet').classList.remove('open');$('#locateBtn').onclick=locateUser;$('#themeBtn').onclick=()=>document.body.classList.toggle('night');addEventListener('online',setOnlineState);addEventListener('offline',setOnlineState);setOnlineState();}
+function bindUI(){let timer;$('#searchInput').addEventListener('input',()=>{clearTimeout(timer);timer=setTimeout(applyFilters,120);});['zoneFilter','typeFilter','navilyFilter','restaurantFilter','vhfFilter','favoritesFilter'].forEach(id=>$('#'+id).addEventListener('change',applyFilters));$('#resetFilters').onclick=resetFilters;$('#filtersToggle').onclick=openFiltersMobile;$('#filtersClose').onclick=closeFiltersMobile;$('#panelBackdrop').onclick=closeFiltersMobile;$('#detailClose').onclick=()=>$('#detailSheet').classList.remove('open');$('#locateBtn').onclick=locateUser;$('#themeBtn').onclick=()=>document.body.classList.toggle('night');addEventListener('online',setOnlineState);addEventListener('offline',setOnlineState);setOnlineState();}
 let installPrompt=null;addEventListener('beforeinstallprompt',e=>{e.preventDefault();installPrompt=e;$('#installBtn').hidden=false;});$('#installBtn').addEventListener('click',async()=>{if(!installPrompt)return;installPrompt.prompt();await installPrompt.userChoice;installPrompt=null;$('#installBtn').hidden=true;});
 async function registerServiceWorker(){if(!('serviceWorker'in navigator))return;try{const reg=await navigator.serviceWorker.register('sw.js');reg.addEventListener('updatefound',()=>{const worker=reg.installing;if(!worker)return;worker.addEventListener('statechange',()=>{if(worker.state==='installed'&&navigator.serviceWorker.controller)$('#updateBadge').classList.add('show');});});$('#updateBadge').onclick=()=>location.reload();}catch(e){console.error(e);}}
 const DB_PATH='database/THETIS_Database_MASTER.xlsx';

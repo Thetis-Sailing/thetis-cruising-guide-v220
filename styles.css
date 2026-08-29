@@ -374,7 +374,7 @@ body.night .weather-actions-left button{
 }
 
 
-/* THETIS v2.5.5 TEST — accès direct Navily uniquement pour Pedi */
+/* THETIS v2.5.6 — campagne pilote Navily : ports et marinas */
 .coordinates-data{min-width:0}
 .location-actions{
   display:flex;
