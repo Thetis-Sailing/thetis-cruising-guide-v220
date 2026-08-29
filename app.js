@@ -1,5 +1,5 @@
 'use strict';
-const state={records:[],filtered:[],markers:new Map(),currentId:null,favorites:new Set(JSON.parse(localStorage.getItem('thetis-favorites')||'[]')),map:null,layer:null,userMarker:null};
+const state={records:[],filtered:[],approachesBySite:new Map(),markers:new Map(),currentId:null,favorites:new Set(JSON.parse(localStorage.getItem('thetis-favorites')||'[]')),map:null,layer:null,userMarker:null};
 const $=s=>document.querySelector(s);
 const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const clean=(v,f='À documenter')=>(v===null||v===undefined||String(v).trim()==='')?f:String(v);
@@ -18,6 +18,78 @@ function stars(n){if(!Number.isFinite(n))return'—';const x=Math.max(0,Math.min
 function depthText(r){const a=Number.isFinite(r.profondeurMin)?r.profondeurMin:null,b=Number.isFinite(r.profondeurMax)?r.profondeurMax:null;if(a!==null&&b!==null)return`${a} à ${b} m`;if(a!==null)return`dès ${a} m`;if(b!==null)return`jusqu’à ${b} m`;return'À documenter';}
 function coordDM(value,isLat){if(!Number.isFinite(value))return'À documenter';const hemi=isLat?(value>=0?'N':'S'):(value>=0?'E':'W');const abs=Math.abs(value),deg=Math.floor(abs),min=(abs-deg)*60;return`${deg}°${min.toFixed(1).replace('.',',')}′ ${hemi}`;}
 const infoCard=(l,v)=>`<div class="info-card"><b>${l}</b><strong>${esc(clean(v))}</strong></div>`;
+function compass16(deg){
+  if(!Number.isFinite(Number(deg)))return'—';
+  const labels=['N','NNE','NE','ENE','E','ESE','SE','SSE','S','SSO','SO','OSO','O','ONO','NO','NNO'];
+  return labels[Math.round((((Number(deg)%360)+360)%360)/22.5)%16];
+}
+function fmtWeather(v,digits=0,suffix=''){
+  const n=Number(v);return Number.isFinite(n)?`${n.toFixed(digits).replace('.',',')}${suffix}`:'—';
+}
+function weatherSectionHtml(r){
+  if(!Number.isFinite(r.lat)||!Number.isFinite(r.lon))return `<section class="thetis-section weather-section"><h3>Météo</h3><div class="weather-status">Coordonnées indisponibles.</div></section>`;
+  return `<section class="thetis-section weather-section">
+    <h3>Météo</h3>
+    <div id="weatherPanel" class="weather-panel"><div class="weather-status">Chargement de la météo locale…</div></div>
+  </section>`;
+}
+async function loadWeather(r){
+  const panel=$('#weatherPanel');if(!panel||state.currentId!==r.id)return;
+  if(!navigator.onLine){panel.innerHTML='<div class="weather-status">Météo indisponible hors connexion.</div>';return;}
+  const q=`latitude=${encodeURIComponent(r.lat)}&longitude=${encodeURIComponent(r.lon)}&timezone=auto&cell_selection=sea`;
+  const weatherUrl=`https://api.open-meteo.com/v1/forecast?${q}&current=temperature_2m,pressure_msl,wind_speed_10m,wind_direction_10m,wind_gusts_10m&wind_speed_unit=kn`;
+  const marineUrl=`https://marine-api.open-meteo.com/v1/marine?${q}&current=wave_height,wave_direction,wave_period,sea_surface_temperature`;
+  try{
+    const [wr,mr]=await Promise.allSettled([
+      fetch(weatherUrl,{cache:'no-store'}).then(x=>{if(!x.ok)throw new Error(`Météo HTTP ${x.status}`);return x.json();}),
+      fetch(marineUrl,{cache:'no-store'}).then(x=>{if(!x.ok)throw new Error(`Marine HTTP ${x.status}`);return x.json();})
+    ]);
+    if(state.currentId!==r.id)return;
+    const w=wr.status==='fulfilled'?(wr.value.current||{}):{};
+    const m=mr.status==='fulfilled'?(mr.value.current||{}):{};
+    if(!Object.keys(w).length&&!Object.keys(m).length)throw new Error('Données indisponibles');
+    const windDir=Number(w.wind_direction_10m);
+    const waveDir=Number(m.wave_direction);
+    const time=w.time||m.time||'';
+    const localTime=time&&time.includes('T')?time.split('T')[1]:'';
+    panel.innerHTML=`
+      <div class="weather-grid">
+        <div class="weather-card"><small>Vent</small><strong>${fmtWeather(w.wind_speed_10m,0,' kt')}</strong><span>${compass16(windDir)}${Number.isFinite(windDir)?` · ${Math.round(windDir)}°`:''}</span></div>
+        <div class="weather-card"><small>Rafales</small><strong>${fmtWeather(w.wind_gusts_10m,0,' kt')}</strong><span>à 10 m</span></div>
+        <div class="weather-card"><small>Pression</small><strong>${fmtWeather(w.pressure_msl,0,' hPa')}</strong><span>${fmtWeather(w.temperature_2m,0,' °C')} air</span></div>
+        <div class="weather-card"><small>Vagues</small><strong>${fmtWeather(m.wave_height,1,' m')}</strong><span>${compass16(waveDir)}${Number.isFinite(waveDir)?` · ${Math.round(waveDir)}°`:''}</span></div>
+        <div class="weather-card"><small>Période</small><strong>${fmtWeather(m.wave_period,1,' s')}</strong><span>houle / mer</span></div>
+        <div class="weather-card"><small>Temp. mer</small><strong>${fmtWeather(m.sea_surface_temperature,0,' °C')}</strong><span>${localTime?`mise à jour ${esc(localTime)}`:'modèle météo'}</span></div>
+      </div>
+      <div class="weather-foot">
+        <span>Données indicatives · <a href="https://open-meteo.com/" target="_blank" rel="noopener">Open‑Meteo</a></span>
+        <button id="weatherRefresh" type="button">Actualiser</button>
+      </div>
+      <p class="weather-warning">⚠ Vérifier les prévisions marines officielles et vos outils météo habituels avant toute navigation.</p>`;
+    const refresh=$('#weatherRefresh');if(refresh)refresh.onclick=()=>{panel.innerHTML='<div class="weather-status">Actualisation…</div>';loadWeather(r);};
+  }catch(e){
+    console.warn('Météo THETIS',e);
+    if(state.currentId===r.id)panel.innerHTML='<div class="weather-status">Météo momentanément indisponible. Réessayer avec une connexion Internet.</div>';
+  }
+}
+function approachHtml(siteId){
+  const approaches=state.approachesBySite.get(siteId)||[];
+  const visible=approaches.filter(a=>a.description||a.reperesVisuels||a.dangers);
+  if(!visible.length)return'';
+  return `<section class="thetis-section approach-section">
+    <h3>Approche</h3>
+    <div class="approach-list">${visible.map(a=>{
+      const meta=[a.typeApproche,a.directionArrivee,a.difficulte?`Difficulté : ${a.difficulte}`:'',a.navigationNuit?`Nuit : ${a.navigationNuit}`:''].filter(Boolean);
+      return `<article class="approach-card">
+        ${meta.length?`<p class="approach-meta">${meta.map(esc).join(' · ')}</p>`:''}
+        ${a.description?`<p>${esc(a.description)}</p>`:''}
+        ${a.reperesVisuels?`<p><strong>Repères visuels :</strong> ${esc(a.reperesVisuels)}</p>`:''}
+        ${a.dangers?`<p class="approach-warning"><strong>Vigilance :</strong> ${esc(a.dangers)}</p>`:''}
+        ${a.profondeurEntree!==null?`<p><strong>Profondeur à l’entrée :</strong> ${esc(a.profondeurEntree)} m</p>`:''}
+      </article>`;
+    }).join('')}</div>
+  </section>`;
+}
 function equipmentHtml(r){const e=r.equipements||{};const items=[['Carburant',e.carburant],['Eau',e.eau],['Électricité',e.electricite],['Douches',e.douches],['Laverie',e.laverie],['Wi-Fi',e.wifi],['Déchets',e.dechets],['Réparations',e.chantierReparations]].filter(([,v])=>v&&!['—','À documenter'].includes(v));if(!items.length)return'';return `<div class="section-card"><h3>Équipements</h3><div class="equipment-grid">${items.map(([k,v])=>`<div class="equipment-item"><span>${esc(k)}</span><strong>${esc(v)}</strong></div>`).join('')}</div></div>`;}
 function protectionLevel(v){
   const t=clean(v,'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'');
@@ -64,6 +136,10 @@ function showDetail(id){
           <a target="_blank" rel="noopener" href="https://www.google.com/maps?q=${lat},${lon}" aria-label="Ouvrir dans Google Maps">⌖</a>
         </div>
       </section>
+
+      ${weatherSectionHtml(r)}
+
+      ${approachHtml(r.id)}
 
       <section class="thetis-section">
         <h3>Protection du mouillage</h3>
@@ -115,6 +191,7 @@ function showDetail(id){
     </article>`;
   $('#favoriteBtn').onclick=()=>toggleFavorite(id);
   $('#detailSheet').classList.add('open');
+  loadWeather(r);
 }
 
 function toggleFavorite(id){state.favorites.has(id)?state.favorites.delete(id):state.favorites.add(id);localStorage.setItem('thetis-favorites',JSON.stringify([...state.favorites]));showDetail(id);applyFilters();}
@@ -128,8 +205,45 @@ let installPrompt=null;addEventListener('beforeinstallprompt',e=>{e.preventDefau
 async function registerServiceWorker(){if(!('serviceWorker'in navigator))return;try{const reg=await navigator.serviceWorker.register('sw.js');reg.addEventListener('updatefound',()=>{const worker=reg.installing;if(!worker)return;worker.addEventListener('statechange',()=>{if(worker.state==='installed'&&navigator.serviceWorker.controller)$('#updateBadge').classList.add('show');});});$('#updateBadge').onclick=()=>location.reload();}catch(e){console.error(e);}}
 const DB_PATH='database/THETIS_Database_MASTER.xlsx';
 const DB_SHEET='Base_THETIS_MASTER';
+const APPROACH_SHEET='Approches';
 const num=v=>{const n=Number(String(v??'').replace(',','.'));return Number.isFinite(n)?n:null;};
 const text=v=>(v===null||v===undefined)?'':String(v).trim();
+function sheetRows(workbook,sheetName,requiredHeader){
+  const sheet=workbook.Sheets[sheetName];
+  if(!sheet)return[];
+  const matrix=XLSX.utils.sheet_to_json(sheet,{header:1,defval:''});
+  const headerIndex=matrix.findIndex(row=>row.some(cell=>text(cell)===requiredHeader));
+  if(headerIndex<0)return[];
+  const headers=matrix[headerIndex].map(text);
+  return matrix.slice(headerIndex+1).filter(row=>row.some(cell=>text(cell))).map(row=>Object.fromEntries(headers.map((h,i)=>[h,row[i]??''])));
+}
+function excelRowToApproach(row,index){
+  return {
+    idApproche:text(row.ID_Approche)||`APP-${index+1}`,
+    idSite:text(row.ID_Site),
+    typeApproche:text(row.Type_approche),
+    directionArrivee:text(row['Direction_arrivée']),
+    description:text(row.Description),
+    reperesVisuels:text(row['Repères_visuels']),
+    dangers:text(row.Dangers),
+    profondeurEntree:num(row['Profondeur_entrée_m']),
+    difficulte:text(row['Difficulté']),
+    navigationNuit:text(row.Navigation_nuit),
+    ventTraversier:text(row.Vent_traversier),
+    source:text(row.Source),
+    dateVerification:text(row['Date_vérification']),
+    niveauConfiance:text(row.Niveau_confiance),
+    statut:text(row.Statut)
+  };
+}
+function indexApproaches(rows){
+  const map=new Map();
+  rows.filter(a=>a.idSite&&!/archiv/i.test(a.statut)).forEach(a=>{
+    if(!map.has(a.idSite))map.set(a.idSite,[]);
+    map.get(a.idSite).push(a);
+  });
+  return map;
+}
 function excelRowToRecord(row,index){
   const protections={N:text(row['Prot. N']),NE:text(row['Prot. NE']),E:text(row['Prot. E']),SE:text(row['Prot. SE']),S:text(row['Prot. S']),SO:text(row['Prot. SO']),O:text(row['Prot. O']),NO:text(row['Prot. NO'])};
   return {
@@ -150,9 +264,11 @@ async function loadExcelDatabase(){
   const res=await fetch(DB_PATH,{cache:'no-store'});
   if(!res.ok)throw new Error(`Classeur Excel introuvable (HTTP ${res.status})`);
   const workbook=XLSX.read(await res.arrayBuffer(),{type:'array',cellDates:true});
-  const sheet=workbook.Sheets[DB_SHEET];
-  if(!sheet)throw new Error(`Feuille ${DB_SHEET} introuvable`);
-  return XLSX.utils.sheet_to_json(sheet,{defval:''}).map(excelRowToRecord).filter(r=>r.nom);
+  const baseSheet=workbook.Sheets[DB_SHEET];
+  if(!baseSheet)throw new Error(`Feuille ${DB_SHEET} introuvable`);
+  const records=XLSX.utils.sheet_to_json(baseSheet,{defval:''}).map(excelRowToRecord).filter(r=>r.nom);
+  const approaches=sheetRows(workbook,APPROACH_SHEET,'ID_Approche').map(excelRowToApproach).filter(a=>a.idSite);
+  return {records,approaches};
 }
-async function start(){initMap();bindUI();try{const [records,vRes]=await Promise.all([loadExcelDatabase(),fetch('version.json',{cache:'no-store'})]);state.records=records;if(vRes.ok){const v=await vRes.json();$('#appVersion').textContent=`v${v.version||'2.1.0'}`;}fillSelect('#zoneFilter',state.records.map(r=>r.zone));fillSelect('#typeFilter',state.records.map(r=>r.type));state.filtered=[...state.records];applyFilters();}catch(e){console.error(e);$('#resultCount').textContent='Erreur de chargement';alert(`Impossible de charger la base THETIS.\n${e.message||e}`);}registerServiceWorker();}
+async function start(){initMap();bindUI();try{const [database,vRes]=await Promise.all([loadExcelDatabase(),fetch('version.json',{cache:'no-store'})]);state.records=database.records;state.approachesBySite=indexApproaches(database.approaches);console.info(`THETIS v2.5.1 : ${state.records.length} fiches, ${database.approaches.length} approche(s) chargée(s).`);if(vRes.ok){const v=await vRes.json();$('#appVersion').textContent=`v${v.version||'2.5.1'}`;}fillSelect('#zoneFilter',state.records.map(r=>r.zone));fillSelect('#typeFilter',state.records.map(r=>r.type));state.filtered=[...state.records];applyFilters();}catch(e){console.error(e);$('#resultCount').textContent='Erreur de chargement';alert(`Impossible de charger la base THETIS.\n${e.message||e}`);}registerServiceWorker();}
 start();

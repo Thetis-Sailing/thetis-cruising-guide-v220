@@ -1,66 +1,44 @@
-# THETIS v2.2.5 — panneau mobile +0,5 cm
+# THETIS PWA v2.5.0 — lecture multi-onglets
 
-Cette version est construite directement à partir de la v2.2.4 validée.
+Cette version est construite directement à partir des fichiers de la PWA v2.4.3 transmis le 28 juillet 2026.
 
-Modification unique : sur téléphone, le panneau « Recherche & filtres » est remonté d'environ 0,5 cm supplémentaire. Le bas du panneau reste inchangé.
+## Évolution unique
 
-## Évolution principale
+La PWA lit désormais deux onglets du même classeur :
 
-La PWA lit directement le classeur :
+- `Base_THETIS_MASTER` : fonctionnement historique inchangé ;
+- `Approches` : nouvelles données reliées aux fiches par `ID_Site` = `ID`.
 
-`database/THETIS_Database_MASTER.xlsx`
+L'onglet `Approches` peut rester vide ou même être absent : la PWA continue alors à fonctionner exactement comme la v2.4.3.
 
-Feuille utilisée : `Base_THETIS_MASTER` (183 fiches).
+Lorsqu'une ligne d'approche contient une description, des repères visuels ou des dangers, une section **Approche** apparaît dans la fiche concernée.
 
-## Interface conservée
+## Structure attendue de l'onglet Approches
 
-Carte, filtres, favoris, géolocalisation, mode nuit, panneau mobile, installation PWA et cache hors connexion.
+La ligne d'en-tête est détectée automatiquement grâce à la colonne `ID_Approche`, même si une ligne de titre la précède.
+
+Colonnes prises en charge :
+
+`ID_Approche`, `ID_Site`, `Type_approche`, `Direction_arrivée`, `Description`, `Repères_visuels`, `Dangers`, `Profondeur_entrée_m`, `Difficulté`, `Navigation_nuit`, `Vent_traversier`, `Source`, `Date_vérification`, `Niveau_confiance`, `Statut`.
+
+Les lignes dont le statut contient `Archivé` sont ignorées.
+
+## Compatibilité
+
+Toutes les fonctions de la v2.4.3 sont conservées : carte, filtres, favoris, géolocalisation, mode nuit, installation, services, téléphone, Commentaire THETIS et avertissement final.
 
 ## Publication
 
-Déposer le contenu de ce dossier directement dans le dossier `PWA` du dépôt GitHub, puis valider le commit.
+Remplacer le contenu du dossier `PWA` du dépôt GitHub par le contenu de ce dossier, puis valider le commit. Netlify publiera automatiquement la v2.5.0.
 
-Une connexion Internet est nécessaire à la première ouverture pour charger Leaflet, SheetJS et les premières tuiles cartographiques. Ces ressources sont ensuite mises en cache.
+Après publication, tester d'abord sur ordinateur, puis actualiser la PWA installée sur téléphone. Le nouveau cache porte le nom `thetis-v2.5.0`.
 
-## v2.2.0
-Fiche nautique remise au format convenu : coordonnées degrés/minutes, tableau de protection, mouillage/amarrage, services, gasoil, note et avertissement.
+## v2.5.1 — Section MÉTÉO
 
+Une section **MÉTÉO** est insérée après **Localisation**. Elle utilise les coordonnées déjà présentes dans la fiche et interroge Open‑Meteo uniquement lorsque la fiche est ouverte et qu’une connexion Internet est disponible.
 
-## Version 2.2.0
-Fiche THETIS reconstruite fidèlement selon la maquette validée : présentation claire, protections par secteur, caractéristiques, services, informations à terre, notes et alertes.
+Affichage : vent en nœuds, rafales, direction, pression/température de l’air, hauteur et direction des vagues, période et température de la mer. Aucune nouvelle colonne Excel n’est requise.
 
+Les données météo sont indicatives et ne remplacent pas les prévisions marines officielles ni les outils habituels du navigateur. Attribution Open‑Meteo intégrée à l’interface.
 
-## Correctif v2.2.1
-
-- Sur téléphone, l’ouverture du panneau des filtres ne place plus automatiquement le curseur dans le champ Recherche. Le clavier ne s’ouvre que lorsque l’utilisateur touche volontairement ce champ.
-
-
-## Modification v2.2.4
-Le panneau Recherche & filtres sur mobile est remonté d’environ 1 cm supplémentaire à partir de la v2.2.3. Aucune autre fonctionnalité n’est modifiée.
-
-
-## Version 2.3.0 — enrichissement du bloc Services
-
-- Ajout de la colonne **Téléphone** lue depuis `THETIS_Database_MASTER.xlsx`.
-- Bloc **Services** compact en grille de 3 colonnes et 3 lignes : VHF, Téléphone, Carburant, Eau, Électricité, Douches, Laverie, Déchets et Réparation.
-- Bloc **À terre** en 3 colonnes : Wi-Fi, Supermarché et Restaurant / Snack.
-- Toutes les améliorations validées des versions 2.2.1 à 2.2.5 sont conservées.
-
-## Version 2.4.0 — Commentaire THETIS
-
-Modification unique appliquée à la version stable 2.3.0 :
-
-- ajout, en fin de fiche, de la section **💬 Commentaire THETIS** ;
-- affichage du contenu de la colonne **Notes THETIS** sous forme d’un paragraphe continu ;
-- affichage de *« Commentaire THETIS en cours de rédaction... »* lorsque la cellule est vide ;
-- intégration complète aux modes Jour et Nuit ;
-- aucune autre modification de la PWA.
-
-
-## Version 2.4.1 — position du Commentaire THETIS
-
-Correctif unique appliqué à la version 2.4.0 :
-
-- déplacement de la section **💬 Commentaire THETIS** immédiatement après la section **À terre** ;
-- style, contenu et fonctionnement inchangés ;
-- aucune autre modification de la PWA.
+Le cache de la PWA est `thetis-v2.5.1`; les réponses Open‑Meteo ne sont pas mises en cache par le Service Worker afin d’éviter d’afficher une météo ancienne.
