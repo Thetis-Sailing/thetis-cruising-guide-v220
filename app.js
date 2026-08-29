@@ -30,45 +30,46 @@ function weatherToolsHtml(r){
   const meteoConsultUrl='https://marine.meteoconsult.fr/carte-marine/carte-interactive';
   const windyUrl=`https://www.windy.com/${r.lat}/${r.lon}`;
 
-  const meteoConsultIcon=`
-    <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-      <circle cx="12" cy="12" r="8.5"></circle>
-      <path d="M14.8 9.2l-1.8 5.6-5.6 1.8 1.8-5.6 5.6-1.8z"></path>
-      <circle cx="12" cy="12" r="1.2" fill="currentColor" stroke="none"></circle>
-    </svg>`;
-
-  const windyIcon=`
-    <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-      <path d="M4 9.5h9.5a2.5 2.5 0 1 0-2.3-3.5"></path>
-      <path d="M3 14h13.5a2.5 2.5 0 1 1-2.4 3.5"></path>
-      <path d="M4 18.5h7"></path>
-    </svg>`;
-
-  return `
-    <div class="weather-tools" aria-label="Outils météo externes">
-      <a class="weather-tool-btn meteo-consult"
-         href="${meteoConsultUrl}"
-         target="_blank"
-         rel="noopener"
-         title="Ouvrir Météo Consult Marine"
-         aria-label="Ouvrir Météo Consult Marine">
-        ${meteoConsultIcon}
-      </a>
-      <a class="weather-tool-btn windy"
-         href="${windyUrl}"
-         target="_blank"
-         rel="noopener"
-         title="Ouvrir Windy"
-         aria-label="Ouvrir Windy">
-        ${windyIcon}
-      </a>
-    </div>`;
+  return `<div class="weather-tools" aria-label="Outils météo externes">
+    <a class="weather-tool-btn meteo-consult"
+       href="${meteoConsultUrl}" target="_blank" rel="noopener"
+       title="Ouvrir Météo Consult Marine"
+       aria-label="Ouvrir Météo Consult Marine">
+      <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor"
+           stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="8.5"></circle>
+        <path d="M14.8 9.2l-1.8 5.6-5.6 1.8 1.8-5.6 5.6-1.8z"></path>
+        <circle cx="12" cy="12" r="1.2" fill="currentColor" stroke="none"></circle>
+      </svg>
+    </a>
+    <a class="weather-tool-btn windy"
+       href="${windyUrl}" target="_blank" rel="noopener"
+       title="Ouvrir Windy"
+       aria-label="Ouvrir Windy">
+      <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor"
+           stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M4 9.5h9.5a2.5 2.5 0 1 0-2.3-3.5"></path>
+        <path d="M3 14h13.5a2.5 2.5 0 1 1-2.4 3.5"></path>
+        <path d="M4 18.5h7"></path>
+      </svg>
+    </a>
+  </div>`;
+}
+function weatherActionsHtml(r){
+  return `<div class="weather-actions">
+    <div class="weather-actions-left">
+      <a class="weather-source-link" href="https://open-meteo.com/" target="_blank" rel="noopener">Open‑Meteo</a>
+      <button id="weatherRefresh" type="button">Actualiser</button>
+    </div>
+    ${weatherToolsHtml(r)}
+  </div>`;
 }
 function weatherSectionHtml(r){
   if(!Number.isFinite(r.lat)||!Number.isFinite(r.lon))return `<section class="thetis-section weather-section"><h3>Météo</h3><div class="weather-status">Coordonnées indisponibles.</div></section>`;
   return `<section class="thetis-section weather-section">
     <h3>Météo</h3>
     <div id="weatherPanel" class="weather-panel"><div class="weather-status">Chargement de la météo locale…</div></div>
+    ${weatherActionsHtml(r)}
   </section>`;
 }
 async function loadWeather(r){
@@ -92,20 +93,15 @@ async function loadWeather(r){
     const localTime=time&&time.includes('T')?time.split('T')[1]:'';
     panel.innerHTML=`
       <div class="weather-grid">
-        <div class="weather-card"><small>Vent</small><strong>${fmtWeather(w.wind_speed_10m,0,' kt')}</strong><span>${compass16(windDir)}${Number.isFinite(windDir)?` · ${Math.round(windDir)}°`:''}</span></div>
-        <div class="weather-card"><small>Rafales</small><strong>${fmtWeather(w.wind_gusts_10m,0,' kt')}</strong><span>à 10 m</span></div>
-        <div class="weather-card"><small>Pression</small><strong>${fmtWeather(w.pressure_msl,0,' hPa')}</strong><span>${fmtWeather(w.temperature_2m,0,' °C')} air</span></div>
-        <div class="weather-card"><small>Vagues</small><strong>${fmtWeather(m.wave_height,1,' m')}</strong><span>${compass16(waveDir)}${Number.isFinite(waveDir)?` · ${Math.round(waveDir)}°`:''}</span></div>
-        <div class="weather-card"><small>Période</small><strong>${fmtWeather(m.wave_period,1,' s')}</strong><span>houle / mer</span></div>
-        <div class="weather-card"><small>Temp. mer</small><strong>${fmtWeather(m.sea_surface_temperature,0,' °C')}</strong><span>${localTime?`mise à jour ${esc(localTime)}`:'modèle météo'}</span></div>
+        <div class="weather-card"><i>🌬️</i><small>Vent</small><strong>${fmtWeather(w.wind_speed_10m,0,' kt')}</strong><span>${compass16(windDir)}${Number.isFinite(windDir)?` · ${Math.round(windDir)}°`:''}</span></div>
+        <div class="weather-card"><i>💨</i><small>Rafales</small><strong>${fmtWeather(w.wind_gusts_10m,0,' kt')}</strong><span>à 10 m</span></div>
+        <div class="weather-card"><i>🌡️</i><small>Air / pression</small><strong>${fmtWeather(w.temperature_2m,0,' °C')}</strong><span>${fmtWeather(w.pressure_msl,0,' hPa')}</span></div>
+        <div class="weather-card"><i>🌊</i><small>Vagues</small><strong>${fmtWeather(m.wave_height,1,' m')}</strong><span>${compass16(waveDir)}${Number.isFinite(waveDir)?` · ${Math.round(waveDir)}°`:''}</span></div>
+        <div class="weather-card"><i>⏱️</i><small>Période</small><strong>${fmtWeather(m.wave_period,1,' s')}</strong><span>houle / mer</span></div>
+        <div class="weather-card"><i>🌡️</i><small>Temp. mer</small><strong>${fmtWeather(m.sea_surface_temperature,0,' °C')}</strong><span>${localTime?`mise à jour ${esc(localTime)}`:'modèle météo'}</span></div>
       </div>
-      <div class="weather-foot">
-        <span>Données indicatives · <a href="https://open-meteo.com/" target="_blank" rel="noopener">Open‑Meteo</a></span>
-        <button id="weatherRefresh" type="button">Actualiser</button>
-      </div>
-      ${weatherToolsHtml(r)}
-      <p class="weather-warning">⚠ Vérifier les prévisions marines officielles et vos outils météo habituels avant toute navigation.</p>`;
-    const refresh=$('#weatherRefresh');if(refresh)refresh.onclick=()=>{panel.innerHTML='<div class="weather-status">Actualisation…</div>';loadWeather(r);};
+`;
+
   }catch(e){
     console.warn('Météo THETIS',e);
     if(state.currentId===r.id)panel.innerHTML='<div class="weather-status">Météo momentanément indisponible. Réessayer avec une connexion Internet.</div>';
@@ -226,10 +222,12 @@ function showDetail(id){
 
      
 
-     <footer class="profile-disclaimer important"><span>⚠️</span><p><strong>IMPORTANT</strong><br>Les informations de <strong>THETIS</strong> sont fournies à titre indicatif. <strong>Une vérification sur Navionics est indispensable avant toute navigation</strong>, ainsi qu'avec les cartes marines officielles, les Instructions nautiques et les conditions météorologiques du moment.</p></footer>
+     <footer class="profile-disclaimer important"><span>⚠️</span><p><strong>IMPORTANT</strong><br>Les informations de <strong>THETIS</strong> sont fournies à titre indicatif. <strong>Une vérification sur Navionics est indispensable avant toute navigation</strong>, ainsi qu'avec les cartes marines officielles et les Instructions nautiques. Les données météorologiques sont indicatives : vérifiez également les prévisions marines officielles et vos outils météo habituels.</p></footer>
     </article>`;
   $('#favoriteBtn').onclick=()=>toggleFavorite(id);
   $('#detailSheet').classList.add('open');
+  const weatherRefresh=$('#weatherRefresh');
+  if(weatherRefresh)weatherRefresh.onclick=()=>{const panel=$('#weatherPanel');if(panel)panel.innerHTML='<div class="weather-status">Actualisation…</div>';loadWeather(r);};
   loadWeather(r);
 }
 
